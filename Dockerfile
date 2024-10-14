@@ -1,26 +1,22 @@
-ARG BASE_VERSION=22.04
-
-ARG BASE_IMAGE=ubuntu:$BASE_VERSION
+ARG BASE_IMAGE=ubuntu:24.04
 
 FROM ${BASE_IMAGE} as documentserver
 LABEL maintainer Ascensio System SIA <support@onlyoffice.com>
 
-ARG BASE_VERSION
-ARG PG_VERSION=14
+ARG BASE_VERSION=24.04 \
+    PG_VERSION=14 \
+    ONLYOFFICE_VALUE=onlyoffice
 
-ENV OC_RELEASE_NUM=21
-ENV OC_RU_VER=12
-ENV OC_RU_REVISION_VER=0
-ENV OC_RESERVED_NUM=0
-ENV OC_RU_DATE=0
-ENV OC_PATH=${OC_RELEASE_NUM}${OC_RU_VER}000
-ENV OC_FILE_SUFFIX=${OC_RELEASE_NUM}.${OC_RU_VER}.${OC_RU_REVISION_VER}.${OC_RESERVED_NUM}.${OC_RU_DATE}${OC_FILE_SUFFIX}dbru
-ENV OC_VER_DIR=${OC_RELEASE_NUM}_${OC_RU_VER}
-ENV OC_DOWNLOAD_URL=https://download.oracle.com/otn_software/linux/instantclient/${OC_PATH}
-
-ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8 DEBIAN_FRONTEND=noninteractive PG_VERSION=${PG_VERSION} BASE_VERSION=${BASE_VERSION}
-
-ARG ONLYOFFICE_VALUE=onlyoffice
+ENV OC_RELEASE_NUM=21 \
+    OC_RU_VER=12 \
+    OC_RU_REVISION_VER=0 \
+    OC_RESERVED_NUM=0 \
+    OC_RU_DATE=0 \
+    OC_PATH=${OC_RELEASE_NUM}${OC_RU_VER}000 \
+    OC_FILE_SUFFIX=${OC_RELEASE_NUM}.${OC_RU_VER}.${OC_RU_REVISION_VER}.${OC_RESERVED_NUM}.${OC_RU_DATE}${OC_FILE_SUFFIX}dbru \
+    OC_VER_DIR=${OC_RELEASE_NUM}_${OC_RU_VER} \
+    OC_DOWNLOAD_URL=https://download.oracle.com/otn_software/linux/instantclient/${OC_PATH} \
+    LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8 DEBIAN_FRONTEND=noninteractive PG_VERSION=${PG_VERSION} BASE_VERSION=${BASE_VERSION}
 
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
     apt-get -y update && \
@@ -53,6 +49,7 @@ RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
         libxtst6 \
         mssql-tools18 \
         mysql-client \
+        mc \
         nano \
         net-tools \
         netcat-openbsd \
@@ -99,12 +96,12 @@ COPY oracle/sqlplus /usr/bin/sqlplus
 
 EXPOSE 80 443
 
-ARG COMPANY_NAME=onlyoffice
-ARG PRODUCT_NAME=documentserver
-ARG PRODUCT_EDITION=
-ARG PACKAGE_VERSION=
-ARG TARGETARCH
-ARG PACKAGE_BASEURL="http://download.onlyoffice.com/install/documentserver/linux"
+ARG COMPANY_NAME=onlyoffice \
+    PRODUCT_NAME=documentserver \
+    PRODUCT_EDITION \
+    PACKAGE_VERSION \
+    TARGETARCH \
+    PACKAGE_BASEURL="http://download.onlyoffice.com/install/documentserver/linux"
 
 ENV COMPANY_NAME=$COMPANY_NAME \
     PRODUCT_NAME=$PRODUCT_NAME \
